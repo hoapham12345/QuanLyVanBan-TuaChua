@@ -58,9 +58,6 @@ Update-Database
 * Nhấn `F5` hoặc nút **Run** trên Visual Studio để khởi động ứng dụng.
 * Đăng nhập bằng tài khoản Admin mặc định (nếu đã được cấu hình trong DB) hoặc tạo tài khoản mới để trải nghiệm.
 
-## 📷 Giao diện hệ thống
-
-*(Kéo thả các ảnh chụp màn hình dự án của bạn vào đây, ví dụ: Trang chủ, Form phê duyệt văn bản, Quản lý cán bộ...)*
 
 ## 🎓 Tác giả
 
