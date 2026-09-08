@@ -71,6 +71,5 @@ Update-Database
 
 ```
 
-**Mẹo nhỏ cho bạn:** Ở phần `## 📷 Giao diện hệ thống` trên GitHub, bạn có thể chỉnh sửa file `README.md` trực tiếp trên web, sau đó copy 1-2 bức ảnh chụp màn hình web của bạn rồi dán thẳng (Ctrl+V) vào khung soạn thảo. GitHub sẽ tự động tạo link ảnh hiển thị rất đẹp mắt!
 
 ```
