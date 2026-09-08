@@ -1,0 +1,372 @@
+﻿@model DocManager.Models.Document
+
+@{
+    ViewData["Title"] = "Thêm mới văn bản";
+}
+
+<div class="container my-4" style="max-width: 900px;">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i> Trang chủ</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Quản lý tài liệu</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Thêm mới văn bản</li>
+        </ol>
+    </nav>
+
+    <div class="card border-0 shadow-lg rounded-4">
+        <!-- Header card với gradient -->
+        <div class="card-header bg-gradient-primary text-white rounded-top-4 p-4" style="background: linear-gradient(135deg, #0b5e7c 0%, #1a7a9e 100%);">
+            <div class="d-flex align-items-center">
+                <div class="me-3">
+                    <i class="fas fa-file-upload fa-2x"></i>
+                </div>
+                <div>
+                    <h4 class="mb-0 fw-bold">Thêm mới Tài liệu / Văn bản</h4>
+                    <p class="mb-0 opacity-75 small">Nhập đầy đủ thông tin để tạo mới tài liệu trong hệ thống</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-4 p-lg-5">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <!-- Thông tin cơ bản -->
+                <div class="section-title mb-4">
+                    <i class="fas fa-info-circle text-primary me-2"></i>
+                    <span class="fw-bold">Thông tin cơ bản</span>
+                    <hr class="mt-2">
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label asp-for="DocumentNumber" class="form-label fw-semibold">
+                            <i class="fas fa-hashtag text-muted me-1"></i>Số văn bản <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="fas fa-file-signature text-primary"></i>
+                            </span>
+                            <input asp-for="DocumentNumber" class="form-control border-start-0" placeholder="Ví dụ: 102/QĐ-UBND" required />
+                        </div>
+                        <span asp-validation-for="DocumentNumber" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Category" class="form-label fw-semibold">
+                            <i class="fas fa-tag text-muted me-1"></i>Loại văn bản <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="fas fa-folder-open text-primary"></i>
+                            </span>
+                            <select asp-for="Category" class="form-select border-start-0" required>
+                                <option value="">-- Chọn loại văn bản --</option>
+                                <option value="Văn bản đến">📥 Văn bản đến</option>
+                                <option value="Văn bản đi">📤 Văn bản đi</option>
+                                <option value="Công văn">📩 Công văn</option>
+                                <option value="Thông báo">📢 Thông báo</option>
+                                <option value="Nghị quyết">📜 Nghị quyết</option>
+                                <option value="Quyết định">⚖️ Quyết định</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="Category" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Title" class="form-label fw-semibold">
+                        <i class="fas fa-heading text-muted me-1"></i>Tên tài liệu / Trích yếu <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="fas fa-pencil-alt text-primary"></i>
+                        </span>
+                        <input asp-for="Title" class="form-control border-start-0" placeholder="Nhập tên tài liệu hoặc trích yếu nội dung..." required />
+                    </div>
+                    <span asp-validation-for="Title" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Content" class="form-label fw-semibold">
+                        <i class="fas fa-align-left text-muted me-1"></i>Nội dung tóm tắt
+                    </label>
+                    <textarea asp-for="Content" class="form-control" rows="3" placeholder="Nhập tóm tắt nội dung..." style="resize: vertical;"></textarea>
+                </div>
+
+                <!-- Thông tin bổ sung -->
+                <div class="section-title mb-4 mt-4">
+                    <i class="fas fa-calendar-alt text-primary me-2"></i>
+                    <span class="fw-bold">Thông tin bổ sung</span>
+                    <hr class="mt-2">
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label asp-for="IssueDate" class="form-label fw-semibold">
+                            <i class="fas fa-calendar-day text-muted me-1"></i>Ngày ban hành <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="fas fa-calendar-alt text-primary"></i>
+                            </span>
+                            <input asp-for="IssueDate" type="date" class="form-control border-start-0" required />
+                        </div>
+                        <span asp-validation-for="IssueDate" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="PersonInCharge" class="form-label fw-semibold">
+                            <i class="fas fa-user text-muted me-1"></i>Người phụ trách
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="fas fa-user-tie text-primary"></i>
+                            </span>
+                            <input asp-for="PersonInCharge" class="form-control border-start-0" placeholder="Họ tên người phụ trách..." />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload file -->
+      
+                <div class="section-title mb-4 mt-4">
+                    <i class="fas fa-paperclip text-primary me-2"></i>
+                    <span class="fw-bold">File đính kèm</span>
+                    <hr class="mt-2">
+                </div>
+
+                <div class="mb-4">
+                    <div class="upload-area border-2 border-dashed rounded-3 p-4 text-center" style="border-color: #dee2e6; background: #fafbfc; transition: all 0.3s;">
+                        <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                        <p class="mb-2 fw-semibold">Kéo thả file vào đây hoặc nhấp để chọn</p>
+                        <p class="text-muted small">Hỗ trợ: Word, Excel, PDF, JPEG, PNG (Tối đa 20MB)</p>
+                        <input type="file" name="uploadFile" class="form-control" />
+                        <div id="fileInfo" class="mt-2 text-success fw-semibold" style="display: none;">
+                            <i class="fas fa-check-circle"></i> <span id="fileName"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-4">
+        <label class="form-label fw-bold"><i class="bi bi-shield-lock text-success"></i> Phân quyền xem tài liệu</label>
+        <div class="border p-3 rounded bg-light">
+            <div class="form-check form-switch mb-2 border-bottom pb-2">
+                <input class="form-check-input" type="checkbox" name="selectedDepts" value="ALL" id="dept-all" checked>
+                <label class="form-check-label text-success fw-bold" for="dept-all">Công khai toàn cơ quan</label>
+            </div>
+            
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input dept-item" type="checkbox" name="selectedDepts" value="VanPhong">
+                        <label class="form-check-label">Văn phòng HĐND & UBND</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input dept-item" type="checkbox" name="selectedDepts" value="TuPhap">
+                        <label class="form-check-label">Phòng Tư pháp</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input dept-item" type="checkbox" name="selectedDepts" value="TaiNguyen">
+                        <label class="form-check-label">Phòng Tài nguyên - Môi trường</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input dept-item" type="checkbox" name="selectedDepts" value="TaiChinh">
+                        <label class="form-check-label">Phòng Tài chính - Kế hoạch</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input dept-item" type="checkbox" name="selectedDepts" value="GiaoDuc">
+                        <label class="form-check-label">Phòng Giáo dục & Đào tạo</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input dept-item" type="checkbox" name="selectedDepts" value="NongNghiep">
+                        <label class="form-check-label">Phòng Nông nghiệp & PTNT</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script nhỏ để nếu tick "Công khai" thì bỏ tick các phòng ban lẻ và ngược lại -->
+    <script>
+        document.getElementById('dept-all').addEventListener('change', function() {
+            if(this.checked) {
+                document.querySelectorAll('.dept-item').forEach(cb => cb.checked = false);
+            }
+        });
+        document.querySelectorAll('.dept-item').forEach(cb => {
+            cb.addEventListener('change', function() {
+                if(this.checked) document.getElementById('dept-all').checked = false;
+            });
+        });
+    </script>
+                <!-- Nút hành động -->
+                <div class="d-flex justify-content-between align-items-center border-top pt-4 mt-4">
+                    <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                        <i class="fas fa-arrow-left me-2"></i>Quay lại
+                    </a>
+                    <div>
+                        <button type="reset" class="btn btn-outline-warning me-2 px-4">
+                            <i class="fas fa-undo me-2"></i>Nhập lại
+                        </button>
+                        <button type="submit" class="btn btn-primary px-5" style="background: linear-gradient(135deg, #0b5e7c 0%, #1a7a9e 100%); border: none;">
+                            <i class="fas fa-save me-2"></i>Lưu tài liệu
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- CSS tùy chỉnh thêm -->
+<style>
+    /* Breadcrumb */
+    .breadcrumb {
+        background: transparent;
+        padding: 0;
+    }
+
+    .breadcrumb-item a {
+        color: #0b5e7c;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+        .breadcrumb-item a:hover {
+            color: #1a7a9e;
+            text-decoration: underline;
+        }
+
+    /* Card */
+    .card {
+        overflow: hidden;
+        border: none;
+    }
+
+    .rounded-top-4 {
+        border-top-left-radius: 1.25rem !important;
+        border-top-right-radius: 1.25rem !important;
+    }
+
+    /* Section title */
+    .section-title {
+        position: relative;
+    }
+
+        .section-title hr {
+            border: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #0b5e7c 0%, transparent 100%);
+            opacity: 0.3;
+        }
+
+    /* Upload area */
+    .upload-area {
+        position: relative;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .upload-area:hover {
+            border-color: #0b5e7c !important;
+            background: #f0f7fb !important;
+        }
+
+        .upload-area input[type="file"] {
+            cursor: pointer;
+        }
+
+    /* Validation */
+    .text-danger {
+        font-size: 0.85rem;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .card-body {
+            padding: 1.5rem !important;
+        }
+
+        .d-flex.justify-content-between {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+            .d-flex.justify-content-between > * {
+                width: 100%;
+            }
+
+            .d-flex.justify-content-between .btn {
+                width: 100%;
+            }
+    }
+
+    /* Hiệu ứng focus */
+    .form-control:focus, .form-select:focus {
+        border-color: #0b5e7c;
+        box-shadow: 0 0 0 0.2rem rgba(11, 94, 124, 0.15);
+    }
+
+    /* Input group */
+    .input-group-text {
+        background-color: #f8f9fa;
+    }
+
+    /* Button hover */
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(11, 94, 124, 0.3);
+    }
+</style>
+
+<!-- Script cho file upload -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                fileName.textContent = `${file.name} (${fileSize} MB)`;
+                fileInfo.style.display = 'block';
+            } else {
+                fileInfo.style.display = 'none';
+            }
+        });
+
+        // Kéo thả
+        const uploadArea = document.querySelector('.upload-area');
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
+
+        uploadArea.addEventListener('dragover', function() {
+            this.style.borderColor = '#0b5e7c';
+            this.style.background = '#e8f4f9';
+        });
+
+        uploadArea.addEventListener('dragleave', function() {
+            this.style.borderColor = '#dee2e6';
+            this.style.background = '#fafbfc';
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            this.style.borderColor = '#dee2e6';
+            this.style.background = '#fafbfc';
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files && files[0]) {
+                fileInput.files = files;
+                const event = new Event('change');
+                fileInput.dispatchEvent(event);
+            }
+        });
+    });
+</script>

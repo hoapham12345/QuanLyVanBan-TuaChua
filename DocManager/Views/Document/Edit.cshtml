@@ -1,0 +1,378 @@
+﻿@model DocManager.Models.Document
+
+@{
+    ViewData["Title"] = "Cập nhật văn bản";
+}
+
+<div class="container my-4" style="max-width: 900px;">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i> Trang chủ</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Quản lý tài liệu</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Cập nhật văn bản</li>
+        </ol>
+    </nav>
+
+    <div class="card border-0 shadow-lg rounded-4">
+        <!-- Header card với gradient cam -->
+        <div class="card-header bg-gradient-warning text-white rounded-top-4 p-4" style="background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);">
+            <div class="d-flex align-items-center">
+                <div class="me-3">
+                    <i class="fas fa-edit fa-2x"></i>
+                </div>
+                <div>
+                    <h4 class="mb-0 fw-bold">Cập nhật Tài liệu / Văn bản</h4>
+                    <p class="mb-0 opacity-75 small">Chỉnh sửa thông tin tài liệu đã có trong hệ thống</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-4 p-lg-5">
+            <form asp-action="Edit" method="post" enctype="multipart/form-data" id="editForm">
+                <input type="hidden" asp-for="Id" />
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <!-- Thông tin cơ bản -->
+                <div class="section-title mb-4">
+                    <i class="fas fa-info-circle text-warning me-2"></i>
+                    <span class="fw-bold">Thông tin cơ bản</span>
+                    <hr class="mt-2">
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label asp-for="DocumentNumber" class="form-label fw-semibold">
+                            <i class="fas fa-hashtag text-muted me-1"></i>Số văn bản <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="fas fa-file-signature text-warning"></i>
+                            </span>
+                            <input asp-for="DocumentNumber" class="form-control border-start-0" placeholder="Ví dụ: 102/QĐ-UBND" required />
+                        </div>
+                        <span asp-validation-for="DocumentNumber" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Category" class="form-label fw-semibold">
+                            <i class="fas fa-tag text-muted me-1"></i>Loại văn bản <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="fas fa-folder-open text-warning"></i>
+                            </span>
+                            <select asp-for="Category" class="form-select border-start-0" required>
+                                <option value="Văn bản đến">📥 Văn bản đến</option>
+                                <option value="Văn bản đi">📤 Văn bản đi</option>
+                                <option value="Công văn">📩 Công văn</option>
+                                <option value="Thông báo">📢 Thông báo</option>
+                                <option value="Nghị quyết">📜 Nghị quyết</option>
+                                <option value="Quyết định">⚖️ Quyết định</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="Category" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Title" class="form-label fw-semibold">
+                        <i class="fas fa-heading text-muted me-1"></i>Tên tài liệu / Trích yếu <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="fas fa-pencil-alt text-warning"></i>
+                        </span>
+                        <input asp-for="Title" class="form-control border-start-0" placeholder="Nhập tên tài liệu hoặc trích yếu nội dung..." required />
+                    </div>
+                    <span asp-validation-for="Title" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Content" class="form-label fw-semibold">
+                        <i class="fas fa-align-left text-muted me-1"></i>Nội dung tóm tắt
+                    </label>
+                    <textarea asp-for="Content" class="form-control" rows="3" placeholder="Nhập tóm tắt nội dung..." style="resize: vertical;"></textarea>
+                </div>
+
+                <!-- Thông tin bổ sung -->
+                <div class="section-title mb-4 mt-4">
+                    <i class="fas fa-calendar-alt text-warning me-2"></i>
+                    <span class="fw-bold">Thông tin bổ sung</span>
+                    <hr class="mt-2">
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label asp-for="IssueDate" class="form-label fw-semibold">
+                            <i class="fas fa-calendar-day text-muted me-1"></i>Ngày ban hành <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="fas fa-calendar-alt text-warning"></i>
+                            </span>
+                            <input asp-for="IssueDate" type="date" class="form-control border-start-0" required />
+                        </div>
+                        <span asp-validation-for="IssueDate" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="PersonInCharge" class="form-label fw-semibold">
+                            <i class="fas fa-user text-muted me-1"></i>Người phụ trách
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="fas fa-user-tie text-warning"></i>
+                            </span>
+                            <input asp-for="PersonInCharge" class="form-control border-start-0" placeholder="Họ tên người phụ trách..." />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- File đính kèm -->
+                <div class="section-title mb-4 mt-4">
+                    <i class="fas fa-paperclip text-warning me-2"></i>
+                    <span class="fw-bold">File đính kèm</span>
+                    <hr class="mt-2">
+                </div>
+
+                <div class="mb-4">
+                    <!-- Hiển thị file hiện tại -->
+                    @if (!string.IsNullOrEmpty(Model.FilePath))
+                    {
+                        <div class="alert alert-info d-flex align-items-center mb-3" role="alert" style="border-left: 4px solid #f39c12;">
+                            <i class="fas fa-paperclip fa-lg me-3 text-warning"></i>
+                            <div>
+                                <strong>File hiện tại:</strong>
+                                <span class="badge bg-light text-dark border px-3 py-2">
+                                    <i class="fas fa-file me-2 text-warning"></i>
+                                    @System.IO.Path.GetFileName(Model.FilePath)
+                                </span>
+                                <span class="text-muted ms-2 small">(Giữ nguyên nếu không tải file mới)</span>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-secondary d-flex align-items-center mb-3" role="alert">
+                            <i class="fas fa-info-circle fa-lg me-3"></i>
+                            <span>Chưa có file đính kèm. Tải lên file mới nếu cần.</span>
+                        </div>
+                    }
+
+                    <!-- Upload area -->
+                    <div class="upload-area border-2 border-dashed rounded-3 p-4 text-center" style="border-color: #dee2e6; background: #fafbfc; transition: all 0.3s;">
+                        <i class="fas fa-cloud-upload-alt fa-3x text-warning mb-3"></i>
+                        <p class="mb-2 fw-semibold">Kéo thả file vào đây hoặc nhấp để chọn</p>
+                        <p class="text-muted small">Hỗ trợ: Word, Excel, PDF, JPEG, PNG (Tối đa 20MB)</p>
+                        <input type="file" name="uploadFile" class="form-control" id="fileInput" style="opacity: 0; position: absolute; width: 100%; height: 100%; top: 0; left: 0; cursor: pointer;" />
+                        <div id="fileInfo" class="mt-2 text-success fw-semibold" style="display: none;">
+                            <i class="fas fa-check-circle"></i> <span id="fileName"></span>
+                        </div>
+                    </div>
+                    <small class="text-muted">* Để trống nếu giữ nguyên file cũ</small>
+                </div>
+
+                <!-- Nút hành động -->
+                <div class="d-flex justify-content-between align-items-center border-top pt-4 mt-4">
+                    <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                        <i class="fas fa-times me-2"></i>Hủy bỏ
+                    </a>
+                    <div>
+                        <button type="reset" class="btn btn-outline-warning me-2 px-4">
+                            <i class="fas fa-undo me-2"></i>Đặt lại
+                        </button>
+                        <button type="submit" class="btn btn-warning px-5" style="background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); border: none; color: white;">
+                            <i class="fas fa-save me-2"></i>Lưu thay đổi
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- CSS tùy chỉnh thêm -->
+<style>
+    /* Breadcrumb */
+    .breadcrumb {
+        background: transparent;
+        padding: 0;
+    }
+
+    .breadcrumb-item a {
+        color: #0b5e7c;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+        .breadcrumb-item a:hover {
+            color: #1a7a9e;
+            text-decoration: underline;
+        }
+
+    .breadcrumb-item.active {
+        color: #f39c12;
+        font-weight: 600;
+    }
+
+    /* Card */
+    .card {
+        overflow: hidden;
+        border: none;
+    }
+
+    .rounded-top-4 {
+        border-top-left-radius: 1.25rem !important;
+        border-top-right-radius: 1.25rem !important;
+    }
+
+    /* Section title */
+    .section-title {
+        position: relative;
+    }
+
+        .section-title hr {
+            border: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #f39c12 0%, transparent 100%);
+            opacity: 0.3;
+        }
+
+    /* Upload area */
+    .upload-area {
+        position: relative;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .upload-area:hover {
+            border-color: #f39c12 !important;
+            background: #fef9f0 !important;
+        }
+
+        .upload-area input[type="file"] {
+            cursor: pointer;
+        }
+
+    /* Validation */
+    .text-danger {
+        font-size: 0.85rem;
+    }
+
+    /* Alert file */
+    .alert {
+        border-radius: 0.75rem;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .card-body {
+            padding: 1.5rem !important;
+        }
+
+        .d-flex.justify-content-between {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+            .d-flex.justify-content-between > * {
+                width: 100%;
+            }
+
+            .d-flex.justify-content-between .btn {
+                width: 100%;
+            }
+    }
+
+    /* Hiệu ứng focus */
+    .form-control:focus, .form-select:focus {
+        border-color: #f39c12;
+        box-shadow: 0 0 0 0.2rem rgba(243, 156, 18, 0.15);
+    }
+
+    /* Input group */
+    .input-group-text {
+        background-color: #f8f9fa;
+    }
+
+    /* Button hover */
+    .btn-warning:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+    }
+
+    .btn-outline-warning:hover {
+        transform: translateY(-1px);
+    }
+</style>
+
+<!-- Script cho file upload -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                fileName.textContent = `${file.name} (${fileSize} MB)`;
+                fileInfo.style.display = 'block';
+
+                // Ẩn thông báo file cũ nếu có
+                const existingFileAlert = document.querySelector('.alert-info');
+                if (existingFileAlert) {
+                    existingFileAlert.style.display = 'none';
+                }
+            } else {
+                fileInfo.style.display = 'none';
+                // Hiển thị lại thông báo file cũ nếu có
+                const existingFileAlert = document.querySelector('.alert-info');
+                if (existingFileAlert) {
+                    existingFileAlert.style.display = 'flex';
+                }
+            }
+        });
+
+        // Kéo thả
+        const uploadArea = document.querySelector('.upload-area');
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
+
+        uploadArea.addEventListener('dragover', function() {
+            this.style.borderColor = '#f39c12';
+            this.style.background = '#fef9f0';
+        });
+
+        uploadArea.addEventListener('dragleave', function() {
+            this.style.borderColor = '#dee2e6';
+            this.style.background = '#fafbfc';
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            this.style.borderColor = '#dee2e6';
+            this.style.background = '#fafbfc';
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files && files[0]) {
+                fileInput.files = files;
+                const event = new Event('change');
+                fileInput.dispatchEvent(event);
+            }
+        });
+
+        // Xác nhận trước khi lưu
+        document.getElementById('editForm').addEventListener('submit', function(e) {
+            const confirmMessage = 'Bạn có chắc chắn muốn cập nhật tài liệu này?';
+            if (!confirm(confirmMessage)) {
+                e.preventDefault();
+                return false;
+            }
+            return true;
+        });
+    });
+</script>

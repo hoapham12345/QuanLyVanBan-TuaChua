@@ -1,0 +1,63 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<IdentityUser>
+@{
+    ViewData["Title"] = "Quản lý Phân quyền Nhân viên";
+    var userDepts = ViewBag.UserDepts as List<DocManager.Models.UserDepartment> ?? new List<DocManager.Models.UserDepartment>();
+}
+
+<div class="container my-4">
+    <h2 class="mb-4"><i class="bi bi-people-fill text-primary me-2"></i> Phân quyền Phòng ban</h2>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <table class="table table-striped align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="ps-4">Tài khoản (Email)</th>
+                        <th>Trạng thái</th>
+                        <th>Thuộc Phòng ban</th>
+                        <th class="text-end pe-4">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        var currentDept = userDepts.FirstOrDefault(u => u.UserName == user.Email)?.DepartmentCode ?? "";
+                        
+                        <tr>
+                            <td class="ps-4 fw-bold">@user.Email</td>
+                            <td>
+                                @if(user.Email == "admin@docmanager.com") {
+                                    <span class="badge bg-danger">Quản trị viên</span>
+                                } else {
+                                    <span class="badge bg-success">Nhân viên</span>
+                                }
+                            </td>
+                            <td colspan="2" class="pe-4">
+                                @if(user.Email != "admin@docmanager.com") {
+                                    <form asp-controller="Admin" asp-action="SetUserDepartment" method="post" class="d-flex justify-content-end gap-2">
+                                        <input type="hidden" name="email" value="@user.Email" />
+                                        <select name="departmentCode" class="form-select form-select-sm w-auto">
+                                            <option value="">-- Chưa xếp phòng --</option>
+                                            <option value="VanPhong" selected="@(currentDept == "VanPhong")">Văn phòng HĐND & UBND</option>
+                                            <option value="TuPhap" selected="@(currentDept == "TuPhap")">Phòng Tư pháp</option>
+                                            <option value="TaiNguyen" selected="@(currentDept == "TaiNguyen")">Phòng Tài nguyên - Môi trường</option>
+                                            <option value="TaiChinh" selected="@(currentDept == "TaiChinh")">Phòng Tài chính - Kế hoạch</option>
+                                            <option value="GiaoDuc" selected="@(currentDept == "GiaoDuc")">Phòng Giáo dục & Đào tạo</option>
+                                            <option value="NongNghiep" selected="@(currentDept == "NongNghiep")">Phòng Nông nghiệp & PTNT</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-floppy"></i> Cập nhật
+                                        </button>
+                                    </form>
+                                } else {
+                                    <span class="text-muted fst-italic">Admin xem được toàn bộ hệ thống</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

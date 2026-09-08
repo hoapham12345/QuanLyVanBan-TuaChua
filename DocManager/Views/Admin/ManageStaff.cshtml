@@ -1,0 +1,212 @@
+﻿@model IEnumerable<DocManager.Models.StaffProfile>
+@{
+    ViewData["Title"] = "Quản lý Hồ sơ Cán bộ";
+}
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-person-vcard text-primary me-2"></i> Danh sách Cán bộ, Công chức</h2>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStaffModal">
+            <i class="bi bi-plus-circle"></i> Thêm Cán bộ
+        </button>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <table class="table table-striped align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="ps-4">Họ và tên</th>
+                        <th>Ngày sinh</th>
+                        <th>Chức vụ</th>
+                        <th>Phòng ban</th>
+                        <th>Số điện thoại</th>
+                        <th class="text-end pe-4">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="6" class="text-center py-4 text-muted">Chưa có hồ sơ cán bộ nào.</td></tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-bold text-primary">@item.FullName</td>
+                                <td>@item.DateOfBirth.ToString("dd/MM/yyyy")</td>
+                                <td>@item.Position</td>
+                                <td><span class="badge bg-secondary">@item.DepartmentCode</span></td>
+                                <td>@item.PhoneNumber</td>
+                                <td class="text-end pe-4">
+                                    <button class="btn btn-sm btn-outline-warning me-1" data-bs-toggle="modal" data-bs-target="#editStaffModal-@item.Id" title="Sửa">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteStaffModal-@item.Id" title="Xóa">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <!-- MODAL SỬA CÁN BỘ (Dành riêng cho từng dòng) -->
+                            <div class="modal fade" id="editStaffModal-@item.Id" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-warning text-dark">
+                                            <h5 class="modal-title">Cập nhật Hồ sơ</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <form asp-controller="Admin" asp-action="EditStaff" method="post">
+                                            <div class="modal-body text-start">
+                                                <!-- Bắt buộc phải có Id ngầm để biết đang sửa ai -->
+                                                <input type="hidden" name="Id" value="@item.Id" />
+
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold">Họ và tên</label>
+                                                    <input type="text" name="FullName" value="@item.FullName" class="form-control" required />
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Ngày sinh</label>
+                                                        <!-- Chuyển format ngày sang yyyy-MM-dd để input type="date" có thể đọc được -->
+                                                        <input type="date" name="DateOfBirth" value="@item.DateOfBirth.ToString("yyyy-MM-dd")" class="form-control" required />
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Số điện thoại</label>
+                                                        <input type="text" name="PhoneNumber" value="@item.PhoneNumber" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Chức vụ</label>
+                                                        <input type="text" name="Position" value="@item.Position" class="form-control" />
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Phòng ban</label>
+                                                        <select name="DepartmentCode" class="form-select">
+                                                            <option value="VanPhong" selected="@(item.DepartmentCode == "VanPhong")">Văn phòng HĐND & UBND</option>
+                                                            <option value="TuPhap" selected="@(item.DepartmentCode == "TuPhap")">Phòng Tư pháp</option>
+                                                            <option value="TaiNguyen" selected="@(item.DepartmentCode == "TaiNguyen")">Phòng Tài nguyên - Môi trường</option>
+                                                            <option value="TaiChinh" selected="@(item.DepartmentCode == "TaiChinh")">Phòng Tài chính - Kế hoạch</option>
+                                                            <option value="GiaoDuc" selected="@(item.DepartmentCode == "GiaoDuc")">Phòng Giáo dục & Đào tạo</option>
+                                                            <option value="NongNghiep" selected="@(item.DepartmentCode == "NongNghiep")">Phòng Nông nghiệp & PTNT</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Email (Tài khoản hệ thống)</label>
+                                                    <select name="Email" class="form-select">
+                                                        <option value="">-- Trống --</option>
+                                                        @if (ViewBag.SystemUsers != null)
+                                                        {
+                                                            foreach (var email in ViewBag.SystemUsers)
+                                                            {
+                                                                <option value="@email" selected="@(item.Email == email)">@email</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                <button type="submit" class="btn btn-warning">Lưu thay đổi</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- MODAL XÓA CÁN BỘ -->
+                            <div class="modal fade" id="deleteStaffModal-@item.Id" tabindex="-1">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-danger text-white">
+                                            <h5 class="modal-title">Xác nhận xóa</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            <p>Bạn có chắc chắn muốn xóa hồ sơ của <strong>@item.FullName</strong>?</p>
+                                            <p class="text-danger small mb-0">Hành động này không thể hoàn tác!</p>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+                                            <form asp-controller="Admin" asp-action="DeleteStaff" method="post">
+                                                <input type="hidden" name="Id" value="@item.Id" />
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                <button type="submit" class="btn btn-danger">Đồng ý Xóa</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL THÊM MỚI CÁN BỘ (Giữ nguyên như cũ, đặt ở dưới cùng) -->
+<div class="modal fade" id="addStaffModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Thêm Hồ sơ mới</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-controller="Admin" asp-action="CreateStaff" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Họ và tên</label>
+                        <input type="text" name="FullName" class="form-control" required />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ngày sinh</label>
+                            <input type="date" name="DateOfBirth" class="form-control" required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Số điện thoại</label>
+                            <input type="text" name="PhoneNumber" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Chức vụ</label>
+                            <input type="text" name="Position" class="form-control" placeholder="VD: Chuyên viên" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Phòng ban</label>
+                            <select name="DepartmentCode" class="form-select">
+                                <option value="VanPhong">Văn phòng HĐND & UBND</option>
+                                <option value="TuPhap">Phòng Tư pháp</option>
+                                <option value="TaiNguyen">Phòng Tài nguyên - Môi trường</option>
+                                <option value="TaiChinh">Phòng Tài chính - Kế hoạch</option>
+                                <option value="GiaoDuc">Phòng Giáo dục & Đào tạo</option>
+                                <option value="NongNghiep">Phòng Nông nghiệp & PTNT</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email (Tài khoản hệ thống)</label>
+                        <select name="Email" class="form-select">
+                            <option value="">-- Chọn tài khoản liên kết --</option>
+                            @if (ViewBag.SystemUsers != null)
+                            {
+                                foreach (var email in ViewBag.SystemUsers)
+                                {
+                                    <option value="@email">@email</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu Hồ sơ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

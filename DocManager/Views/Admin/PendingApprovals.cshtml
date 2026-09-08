@@ -1,0 +1,132 @@
+﻿@model IEnumerable<DocManager.Models.Document>
+@{
+    ViewData["Title"] = "Duyệt văn bản";
+}
+
+<div class="container my-4">
+    <h2 class="mb-4"><i class="bi bi-file-earmark-check text-danger"></i> Văn bản chờ phê duyệt</h2>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <table class="table table-striped align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="ps-4">Số / Ký hiệu</th>
+                        <th>Trích yếu</th>
+                        <th>Ngày tải lên</th>
+                        <th>Người tải lên</th>
+                        <th class="text-end pe-4">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted">Không có văn bản nào đang chờ duyệt.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <!-- NỘI DUNG TỪNG DÒNG VĂN BẢN -->
+                            <tr>
+                                <td class="ps-4 fw-bold">@item.DocumentNumber</td>
+                                <td>@item.Title</td>
+                                <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@item.CreatedBy</td>
+                                <td class="text-end pe-4">
+                                    <button type="button" class="btn btn-sm btn-success px-3 w-100" data-bs-toggle="modal" data-bs-target="#modalApprove-@item.Id">
+                                        <i class="bi bi-shield-check"></i> Duyệt & Xét quyền
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <!-- MODAL PHÊ DUYỆT TƯƠNG ỨNG VỚI TỪNG DÒNG -->
+                            <div class="modal fade" id="modalApprove-@item.Id" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-success text-white">
+                                            <h5 class="modal-title">Phê duyệt & Cấp quyền</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <form asp-controller="Admin" asp-action="ApproveWithPermissions" method="post">
+                                            <div class="modal-body text-start">
+                                                <input type="hidden" name="id" value="@item.Id" />
+                                                <p class="mb-1">Văn bản: <strong class="text-primary">@item.DocumentNumber</strong> - @item.Title</p>
+                                                <p class="text-muted small mb-3">
+                                                    Người tải lên đề xuất quyền: 
+                                                    <span class="badge bg-secondary">@(string.IsNullOrEmpty(item.AllowedDepartments) ? "ALL" : item.AllowedDepartments)</span>
+                                                </p>
+                                                
+                                                <label class="form-label fw-bold text-success"><i class="bi bi-shield-lock"></i> Admin quyết định hiển thị cho:</label>
+                                                <div class="border p-3 rounded bg-light">
+                                                    <!-- Nút ALL -->
+                                                    <div class="form-check text-success fw-bold border-bottom pb-2 mb-2">
+                                                        <input class="form-check-input" type="checkbox" name="adminSelectedDepts" value="ALL" id="all-@item.Id" 
+                                                               @(string.IsNullOrEmpty(item.AllowedDepartments) || item.AllowedDepartments == "ALL" ? "checked" : "")
+                                                               onchange="if(this.checked) { document.querySelectorAll('.dept-item-@item.Id').forEach(cb => cb.checked = false); }">
+                                                        <label class="form-check-label" for="all-@item.Id">Công khai toàn cơ quan</label>
+                                                    </div>
+                                                    
+                                                    <!-- 6 Phòng ban -->
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-6">
+                                                            <div class="form-check mb-2">
+                                                                <input class="form-check-input dept-item-@item.Id" type="checkbox" name="adminSelectedDepts" value="VanPhong" 
+                                                                       @(item.AllowedDepartments?.Contains("VanPhong") == true ? "checked" : "")
+                                                                       onchange="if(this.checked) document.getElementById('all-@item.Id').checked = false;">
+                                                                <label class="form-check-label">Văn phòng HĐND & UBND</label>
+                                                            </div>
+                                                            <div class="form-check mb-2">
+                                                                <input class="form-check-input dept-item-@item.Id" type="checkbox" name="adminSelectedDepts" value="TuPhap" 
+                                                                       @(item.AllowedDepartments?.Contains("TuPhap") == true ? "checked" : "")
+                                                                       onchange="if(this.checked) document.getElementById('all-@item.Id').checked = false;">
+                                                                <label class="form-check-label">Phòng Tư pháp</label>
+                                                            </div>
+                                                            <div class="form-check mb-2">
+                                                                <input class="form-check-input dept-item-@item.Id" type="checkbox" name="adminSelectedDepts" value="TaiNguyen" 
+                                                                       @(item.AllowedDepartments?.Contains("TaiNguyen") == true ? "checked" : "")
+                                                                       onchange="if(this.checked) document.getElementById('all-@item.Id').checked = false;">
+                                                                <label class="form-check-label">Phòng Tài nguyên - MT</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-check mb-2">
+                                                                <input class="form-check-input dept-item-@item.Id" type="checkbox" name="adminSelectedDepts" value="TaiChinh" 
+                                                                       @(item.AllowedDepartments?.Contains("TaiChinh") == true ? "checked" : "")
+                                                                       onchange="if(this.checked) document.getElementById('all-@item.Id').checked = false;">
+                                                                <label class="form-check-label">Phòng Tài chính - KH</label>
+                                                            </div>
+                                                            <div class="form-check mb-2">
+                                                                <input class="form-check-input dept-item-@item.Id" type="checkbox" name="adminSelectedDepts" value="GiaoDuc" 
+                                                                       @(item.AllowedDepartments?.Contains("GiaoDuc") == true ? "checked" : "")
+                                                                       onchange="if(this.checked) document.getElementById('all-@item.Id').checked = false;">
+                                                                <label class="form-check-label">Phòng Giáo dục & ĐT</label>
+                                                            </div>
+                                                            <div class="form-check mb-2">
+                                                                <input class="form-check-input dept-item-@item.Id" type="checkbox" name="adminSelectedDepts" value="NongNghiep" 
+                                                                       @(item.AllowedDepartments?.Contains("NongNghiep") == true ? "checked" : "")
+                                                                       onchange="if(this.checked) document.getElementById('all-@item.Id').checked = false;">
+                                                                <label class="form-check-label">Phòng Nông nghiệp & PTNT</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Chính thức Phê duyệt</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- KẾT THÚC MODAL -->
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,496 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Quản lý Tài liệu Nội bộ · UBND xã Tủa Chùa</title>
+    <!-- Font Awesome 6 (miễn phí) cho icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background: #f5f9fc;
+            color: #1e2b3c;
+            line-height: 1.5;
+        }
+
+        /* header + nav */
+        .top-bar {
+            background: white;
+            box-shadow: 0 2px 12px rgba(0, 20, 30, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .navbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            color: #0b5e7c;
+        }
+
+        .logo-text {
+            font-weight: 600;
+            font-size: 1.3rem;
+            letter-spacing: -0.3px;
+            color: #0a2e40;
+        }
+
+        .logo-text small {
+            font-weight: 400;
+            font-size: 0.85rem;
+            color: #2c5f7a;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #1f3b4b;
+            font-weight: 500;
+            font-size: 0.98rem;
+            transition: 0.2s;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 4px;
+        }
+
+        .nav-links a:hover {
+            color: #0077a3;
+            border-bottom-color: #0077a3;
+        }
+
+        .btn-login {
+            background: #0b5e7c;
+            color: white !important;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.25s;
+            box-shadow: 0 4px 8px rgba(5, 80, 110, 0.15);
+            border-bottom: none !important;
+            text-decoration: none;
+        }
+
+        .btn-login:hover {
+            background: #0a4f69;
+            transform: scale(1.02);
+            box-shadow: 0 6px 14px rgba(5, 70, 95, 0.25);
+            border-bottom: none !important;
+        }
+
+        .btn-login i {
+            font-size: 1rem;
+        }
+
+        /* hero / banner */
+        .hero {
+            background: linear-gradient(145deg, #e3f0f7 0%, #cde1ec 100%);
+            border-radius: 32px;
+            margin: 32px 0 28px 0;
+            padding: 40px 40px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            box-shadow: 0 6px 18px rgba(0, 40, 60, 0.06);
+        }
+
+        .hero-content {
+            flex: 1 1 300px;
+        }
+
+        .hero-content h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #043140;
+            line-height: 1.2;
+        }
+
+        .hero-content h1 span {
+            color: #0a6f92;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            margin-top: 12px;
+            color: #1d445a;
+            max-width: 550px;
+        }
+
+        .hero-image {
+            flex: 1 1 260px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 24px;
+            box-shadow: 0 14px 28px rgba(0, 30, 45, 0.15);
+            background: white;
+            padding: 6px;
+            background: white;
+            object-fit: cover;
+            width: 100%;
+            max-height: 220px;
+        }
+
+        /* hình ảnh kiểu khác: thẻ card ảnh */
+        .section-title {
+            font-size: 1.7rem;
+            font-weight: 600;
+            margin: 40px 0 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title i {
+            color: #0b5e7c;
+            font-size: 1.8rem;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 28px;
+            margin: 18px 0 24px 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 28px;
+            padding: 18px 16px 22px;
+            box-shadow: 0 8px 22px rgba(0, 20, 30, 0.06);
+            transition: 0.2s ease;
+            text-align: center;
+            border: 1px solid rgba(0, 60, 90, 0.04);
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 32px rgba(0, 40, 60, 0.10);
+            border-color: #b8d6e5;
+        }
+
+        .card img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 20px;
+            background: #eef6fa;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+        }
+
+        .card-icon {
+            font-size: 2.4rem;
+            color: #0b5e7c;
+            margin: 8px 0 6px;
+        }
+
+        .card h4 {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 10px 0 4px;
+            color: #103644;
+        }
+
+        .card p {
+            color: #2a556b;
+            font-size: 0.9rem;
+        }
+
+        .badge-doc {
+            background: #d7e9f3;
+            border-radius: 40px;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #005073;
+            display: inline-block;
+            margin-top: 6px;
+        }
+
+        /* block ảnh kiểu khác: ảnh tròn + chú thích */
+        .media-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 30px;
+            background: white;
+            padding: 28px 32px;
+            border-radius: 32px;
+            margin: 28px 0 20px;
+            box-shadow: 0 4px 14px rgba(0, 20, 30, 0.03);
+            border: 1px solid #deecf3;
+        }
+
+        .media-row .text {
+            flex: 2 1 240px;
+        }
+
+        .media-row .text h3 {
+            font-size: 1.5rem;
+            color: #003049;
+        }
+
+        .media-row .text p {
+            color: #1a4a60;
+            margin-top: 6px;
+        }
+
+        .media-row .images {
+            flex: 3 1 300px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 18px;
+        }
+
+        .media-row .images figure {
+            text-align: center;
+            width: 110px;
+        }
+
+        .media-row .images img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 6px 12px rgba(0, 30, 40, 0.10);
+            background: #d9e7f0;
+            transition: 0.15s;
+        }
+
+        .media-row .images img:hover {
+            transform: scale(1.03);
+            border-color: #c2dcee;
+        }
+
+        .media-row .images figcaption {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #1b4c63;
+            margin-top: 6px;
+        }
+
+        /* footer */
+        .footer {
+            border-top: 1px solid #d2e2ed;
+            margin-top: 50px;
+            padding: 30px 0 20px;
+            text-align: center;
+            color: #2a5d76;
+            font-size: 0.95rem;
+        }
+
+        .footer i {
+            margin: 0 6px;
+            color: #0f6f92;
+        }
+
+       @@media (max-width: 640px) {
+            .navbar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+            .nav-links {
+                justify-content: center;
+                gap: 16px;
+            }
+            .hero {
+                flex-direction: column-reverse;
+                text-align: center;
+                padding: 30px 20px;
+            }
+            .hero-content p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .media-row {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- thanh điều hướng + đăng nhập -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="navbar">
+                <div class="logo-area">
+                    <i class="fas fa-file-alt logo-icon"></i>
+                    <div class="logo-text">
+                        UBND xã Tủa Chùa
+                        <small><i class="fas fa-folder-open"></i> Hệ thống tài liệu nội bộ</small>
+                    </div>
+                </div>
+                <div class="nav-links">
+                    <a href="/">Trang chủ</a>
+                    <a href="/Document">Văn bản</a>
+                    <a href="/Document?category=Báo cáo">Báo cáo</a>
+                    <a href="/Document?category=Công văn">Công văn</a>
+                    <a href="/Identity/Account/Login" class="btn-login">
+                        <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="container">
+        <!-- Banner hero với ảnh chèn -->
+        <div class="hero">
+            <div class="hero-content">
+                <h1>Quản lý tài liệu <span>nội bộ</span></h1>
+                <p><i class="fas fa-check-circle" style="color:#006b8f;"></i> Cập nhật văn bản, công văn, báo cáo nhanh chóng. Dễ dàng tra cứu và lưu trữ.</p>
+                <p style="font-size:0.95rem; margin-top: 6px; opacity:0.8;">
+                    <i class="fas fa-print"></i>  Trực thuộc UBND xã Tủa Chùa · Điện Biên
+                </p>
+            </div>
+            <div class="hero-image">
+                <!-- Ảnh chèn: biểu tượng văn phòng / tài liệu (ảnh minh họa) -->
+                <img src="https://cdn.baophapluat.vn/w3840/uploaded/images/2026/03/18/4c73d05b-c928-42b8-a0ec-294fcbe7431e.jpg" alt="Hình ảnh tài liệu nội bộ"
+                     onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22%3E%3Crect fill=%22%23bad6e8%22 width=%22400%22 height=%22200%22/%3E%3Ctext x=%2250%22 y=%22120%22 font-size=%2220%22 fill=%22%23003b57%22 font-family=%22sans-serif%22%3E📁 Tài liệu nội bộ%3C/text%3E%3C/svg%3E'">
+            </div>
+        </div>
+
+        <!-- Danh mục tài liệu + ảnh card -->
+        <div class="section-title">
+            <i class="fas fa-archive"></i> Danh mục tài liệu
+        </div>
+        <div class="card-grid">
+            <div class="card">
+                <i class="fas fa-file-pdf card-icon"></i>
+                <img src="https://cdn.thuvienphapluat.vn//phap-luat/2022/DiemQuynh/9THANG9/VAN-BAN-DI.jpg" alt="Văn bản đi" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22180%22%3E%3Crect fill=%22%23c5ddee%22 width=%22300%22 height=%22180%22/%3E%3Ctext x=%2230%22 y=%22100%22 font-size=%2220%22 fill=%22%23003b57%22%3E📄 Văn bản%3C/text%3E%3C/svg%3E'">
+                <h4>Văn bản đi</h4>
+                <p>Nghị quyết, quyết định</p>
+                <span class="badge-doc"><i class="far fa-clock"></i> 24 tài liệu</span>
+            </div>
+            <div class="card">
+                <i class="fas fa-inbox card-icon"></i>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjrMHZFx78KblLwV8FE7XFcP0jzTvrsEnz7EyPWOTFtQ&s=10" alt="Công văn đến" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22180%22%3E%3Crect fill=%22%23c5ddee%22 width=%22300%22 height=%22180%22/%3E%3Ctext x=%2230%22 y=%22100%22 font-size=%2220%22 fill=%22%23003b57%22%3E📩 Công văn%3C/text%3E%3C/svg%3E'">
+                <h4>Công văn đến</h4>
+                <p>Thông báo, chỉ đạo</p>
+                <span class="badge-doc"><i class="far fa-clock"></i> 18 tài liệu</span>
+            </div>
+            <div class="card">
+                <i class="fas fa-chart-pie card-icon"></i>
+                <img src="https://png.pngtree.com/png-vector/20190215/ourmid/pngtree-vector-report-icon-png-image_533332.jpg" alt="Báo cáo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22180%22%3E%3Crect fill=%22%23c5ddee%22 width=%22300%22 height=%22180%22/%3E%3Ctext x=%2230%22 y=%22100%22 font-size=%2220%22 fill=%22%23003b57%22%3E📊 Báo cáo%3C/text%3E%3C/svg%3E'">
+                <h4>Báo cáo định kỳ</h4>
+                <p>Kinh tế - xã hội</p>
+                <span class="badge-doc"><i class="far fa-file-alt"></i> 12 báo cáo</span>
+            </div>
+            <div class="card">
+                <i class="fas fa-users card-icon"></i>
+                <img src="https://cdn.thuvienphapluat.vn/uploads/laodongtienluong/20230301/NPKP/ho-so-dien-tu.jpg" alt="Hồ sơ cán bộ" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22180%22%3E%3Crect fill=%22%23c5ddee%22 width=%22300%22 height=%22180%22/%3E%3Ctext x=%2230%22 y=%22100%22 font-size=%2220%22 fill=%22%23003b57%22%3E👥 Hồ sơ%3C/text%3E%3C/svg%3E'">
+                <h4>Hồ sơ cán bộ</h4>
+                <p>Quản lý nhân sự</p>
+                <span class="badge-doc"><i class="fas fa-user-check"></i> 31 hồ sơ</span>
+            </div>
+        </div>
+
+        <!-- Khu vực chèn ảnh kiểu khác: ảnh tròn + thông tin -->
+        <div class="media-row">
+            <div class="text">
+                <h3><i class="fas fa-landmark" style="color:#0b5e7c;"></i> Văn phòng UBND xã</h3>
+                <p>Hình ảnh hoạt động nội bộ, các phòng ban và tài liệu được lưu trữ tập trung.</p>
+                <p style="margin-top: 12px; font-size:0.95rem;">
+                    <i class="fas fa-check-circle" style="color:#197a5b;"></i> Hệ thống số hóa · Tìm kiếm thông minh
+                </p>
+            </div>
+            <div class="images">
+                <figure>
+                    <img src="https://cdn.baophapluat.vn/w3840/uploaded/images/2026/03/18/4c73d05b-c928-42b8-a0ec-294fcbe7431e.jpg" alt="Hình ảnh 1" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Ccircle cx=%22100%22 cy=%22100%22 r=%2290%22 fill=%22%23b1d0e6%22/%3E%3Ctext x=%2235%22 y=%22120%22 font-size=%2230%22 fill=%22%23003b57%22%3E🏛️%3C/text%3E%3C/svg%3E'">
+                    <figcaption>Trụ sở</figcaption>
+                </figure>
+                <figure>
+                    <img src="https://png.pngtree.com/png-vector/20191024/ourlarge/pngtree-data-storage-icon-flat-style-png-image_1849746.jpg" alt="Hình ảnh 2" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Ccircle cx=%22100%22 cy=%22100%22 r=%2290%22 fill=%22%23b1d0e6%22/%3E%3Ctext x=%2235%22 y=%22120%22 font-size=%2230%22 fill=%22%23003b57%22%3E📂%3C/text%3E%3C/svg%3E'">
+                    <figcaption>Lưu trữ</figcaption>
+                </figure>
+                <figure>
+                    <img src="https://tuachua.dienbien.gov.vn/Cms_Data/Contents/TUACHUA/Folders/QuanLyTinTuc/~contents/JTE2C8D9EKTUAN2U/phi-n-h-p-t8-UBND.jpg" alt="Hình ảnh 3" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Ccircle cx=%22100%22 cy=%22100%22 r=%2290%22 fill=%22%23b1d0e6%22/%3E%3Ctext x=%2235%22 y=%22120%22 font-size=%2230%22 fill=%22%23003b57%22%3E👩‍💼%3C/text%3E%3C/svg%3E'">
+                    <figcaption>Văn thư</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <!-- Thêm một hàng ảnh kiểu khác: ảnh ngang + caption -->
+        <div style="display: flex; flex-wrap: wrap; gap: 20px; background: #e7f2f9; border-radius: 28px; padding: 24px 22px; margin: 20px 0 12px;">
+            <div style="flex: 1 1 200px; min-width: 120px;">
+                <img src="https://luattamphuocthinh.vn/wp-content/uploads/2025/07/dien-bien.jpg" alt="Tài liệu nội bộ" style="width:100%; border-radius: 20px;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22140%22%3E%3Crect fill=%22%23b8d6e8%22 width=%22300%22 height=%22140%22/%3E%3Ctext x=%2240%22 y=%2280%22 font-size=%2220%22 fill=%22%23003b57%22%3E📑 Tài liệu số%3C/text%3E%3C/svg%3E'">
+                <p style="margin-top: 6px; font-weight: 500;"><i class="fas fa-chevron-right" style="color:#0b5e7c;"></i> Kho lưu trữ số</p>
+            </div>
+            <div style="flex: 1 1 200px; min-width: 120px;">
+                <img src="https://tuachua.dienbien.gov.vn/Cms_Data/Contents/TUACHUA/Folders/QuanLyTinTuc/~contents/E5C2AK5M4KJ866YB/n-ng-nghi-p.jpg" alt="Hội nghị" style="width:100%; border-radius: 20px;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22140%22%3E%3Crect fill=%22%23b8d6e8%22 width=%22300%22 height=%22140%22/%3E%3Ctext x=%2240%22 y=%2280%22 font-size=%2220%22 fill=%22%23003b57%22%3E📋 Biên bản họp%3C/text%3E%3C/svg%3E'">
+                <p style="margin-top: 6px; font-weight: 500;"><i class="fas fa-chevron-right" style="color:#0b5e7c;"></i> Biên bản hội nghị</p>
+            </div>
+        </div>
+
+        <!-- Nút đăng nhập thứ hai (phụ) + thông tin -->
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; background: white; border-radius: 40px; padding: 16px 28px; margin: 32px 0 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.02); border: 1px solid #d7e3ed;">
+            <span><i class="fas fa-shield-alt" style="color:#0b5e7c;"></i> Bảo mật · Nội bộ</span>
+            <a href="/Identity/Account/Login" class="btn-login" style="background: #0b5e7c; padding: 8px 28px;">
+                <i class="fas fa-key"></i> Đăng nhập hệ thống
+            </a>
+        </div>
+
+    </main>
+
+    <footer class="container footer">
+        <i class="fas fa-building"></i> UBND xã Tủa Chùa · Hệ thống Quản lý Tài liệu Nội bộ 
+        <span style="margin:0 12px;">|</span> 
+        <i class="far fa-calendar-alt"></i> Cập nhật 2026 
+        <span style="display:inline-block; margin-left: 12px;">
+            <i class="fas fa-phone-alt"></i>  (023) 3456-789
+        </span>
+    </footer>
+</body>
+</html>

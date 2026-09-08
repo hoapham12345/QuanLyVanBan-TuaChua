@@ -1,0 +1,214 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DocManager</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/DocManager.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><b>DocManager</b></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+
+                        <!-- 1. QUẢN LÝ VĂN BẢN (Menu dạng sổ xuống) -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark fw-bold" href="#" id="navbarDropdownVB" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Quản lý văn bản
+                            </a>
+                            <ul class="dropdown-menu shadow" aria-labelledby="navbarDropdownVB">
+                                <!-- Các link này truyền thẳng tham số category vào hàm Index để tự động lọc -->
+                                <li><a class="dropdown-item" href="/Document?category=Văn bản đến">Văn bản đến</a></li>
+                                <li><a class="dropdown-item" href="/Document?category=Văn bản đi">Văn bản đi</a></li>
+                                <li><a class="dropdown-item" href="/Document?category=Công văn">Công văn</a></li>
+                                <li><a class="dropdown-item" href="/Document?category=Thông báo">Thông báo</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- 2. TRA CỨU -->
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Document" asp-action="Index">Tra cứu</a>
+                        </li>
+
+                        <!-- 3. QUẢN LÝ FILE (Tích hợp thêm nếu cần) -->
+                        <!-- Vì quản lý file đã gắn liền với từng văn bản, bạn có thể để người dùng bấm vào Tra cứu là thấy -->
+                        <!-- 4. THỐNG KÊ -->
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Document" asp-action="Statistics">Thống kê</a>
+                        </li>
+                        <!-- CHỈ HIỂN THỊ NÚT NÀY NẾU TÀI KHOẢN ĐANG ĐĂNG NHẬP LÀ ADMIN -->
+   
+    @if (User.IsInRole("Admin"))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-danger fw-bold" asp-area="" asp-controller="Admin" asp-action="PendingApprovals">
+                <i class="bi bi-shield-check"></i> Duyệt văn bản
+            </a>
+        </li>
+                          <li class="nav-item">
+                                <a class="nav-link text-success fw-bold" asp-area="" asp-controller="Admin" asp-action="ManageUsers">
+                                    <i class="bi bi-people"></i> Phân quyền NV
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-info fw-bold" asp-area="" asp-controller="Admin" asp-action="ManageStaff">
+                                    <i class="bi bi-person-vcard"></i> Hồ sơ Cán bộ
+                                </a>
+                            </li>
+
+        <!-- NÚT MỚI THÊM: NHẬT KÝ -->
+        <li class="nav-item">
+            <a class="nav-link text-primary fw-bold" asp-area="" asp-controller="Admin" asp-action="AuditLogs">
+                <i class="bi bi-clock-history"></i> Nhật ký tải file
+            </a>
+        </li>
+    }
+                    </ul>
+
+                    <!-- Phần này dành cho Authentication (Đăng nhập) mặc định của template -->
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- ============================================== -->
+<!-- GIAO DIỆN CHATBOT HỖ TRỢ TÌM KIẾM              -->
+<!-- ============================================== -->
+<div id="chatbot-container" class="position-fixed" style="bottom: 20px; right: 20px; z-index: 1050;">
+    <!-- Nút bong bóng chat -->
+    <button id="chatbot-toggle" class="btn btn-primary rounded-circle shadow-lg" style="width: 60px; height: 60px;">
+        <i class="bi bi-chat-dots-fill fs-3"></i>
+    </button>
+
+    <!-- Cửa sổ Chat (Mặc định ẩn) -->
+    <div id="chatbot-window" class="card shadow-lg d-none" style="width: 350px; height: 450px; position: absolute; bottom: 70px; right: 0; border-radius: 15px; overflow: hidden;">
+        <!-- Tiêu đề Chat -->
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center p-3">
+            <div class="fw-bold"><i class="bi bi-robot me-2"></i> Trợ lý Tìm kiếm</div>
+            <button id="chatbot-close" class="btn-close btn-close-white" aria-label="Close"></button>
+        </div>
+        
+        <!-- Nội dung tin nhắn -->
+        <div id="chatbot-messages" class="card-body bg-light" style="overflow-y: auto; height: calc(100% - 120px); font-size: 0.9rem;">
+            <!-- Lời chào mặc định -->
+            <div class="d-flex flex-row justify-content-start mb-3">
+                <div class="p-2 bg-white border rounded-3 shadow-sm text-dark">
+                    Xin chào! Tôi có thể giúp bạn tìm kiếm văn bản gì hôm nay? 
+                    <br/><small class="text-muted">(Ví dụ gõ: "Báo cáo tháng 10" hoặc "102/QĐ")</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ô nhập liệu -->
+        <div class="card-footer bg-white p-2 border-top">
+            <div class="input-group">
+                <input type="text" id="chatbot-input" class="form-control" placeholder="Nhập từ khóa..." autocomplete="off" />
+                <button id="chatbot-send" class="btn btn-primary"><i class="bi bi-send-fill"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2026 - DocManager - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <!-- Kịch bản hoạt động của Chatbot -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleBtn = document.getElementById('chatbot-toggle');
+        const closeBtn = document.getElementById('chatbot-close');
+        const chatWindow = document.getElementById('chatbot-window');
+        const sendBtn = document.getElementById('chatbot-send');
+        const chatInput = document.getElementById('chatbot-input');
+        const chatMessages = document.getElementById('chatbot-messages');
+
+        // Mở/Đóng cửa sổ Chat
+        toggleBtn.addEventListener('click', () => chatWindow.classList.toggle('d-none'));
+        closeBtn.addEventListener('click', () => chatWindow.classList.add('d-none'));
+
+        // Hàm thêm tin nhắn vào màn hình
+        function appendMessage(sender, text) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = sender === 'user' 
+                ? 'd-flex flex-row justify-content-end mb-3' 
+                : 'd-flex flex-row justify-content-start mb-3';
+            
+            const bubble = document.createElement('div');
+            bubble.className = sender === 'user' 
+                ? 'p-2 bg-primary text-white rounded-3 shadow-sm' 
+                : 'p-2 bg-white border rounded-3 shadow-sm text-dark';
+            bubble.style.maxWidth = '85%';
+            bubble.innerHTML = text;
+
+            msgDiv.appendChild(bubble);
+            chatMessages.appendChild(msgDiv);
+            
+            // Tự động cuộn xuống dòng mới nhất
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Xử lý gửi tin nhắn
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // 1. Hiển thị tin nhắn của người dùng
+            appendMessage('user', message);
+            chatInput.value = '';
+
+            // 2. Hiển thị trạng thái "đang gõ..."
+            const typingId = 'typing-' + Date.now();
+            chatMessages.insertAdjacentHTML('beforeend', `<div id="${typingId}" class="d-flex flex-row justify-content-start mb-3"><div class="p-2 bg-white border rounded-3 shadow-sm text-muted"><em>Đang tìm kiếm...</em></div></div>`);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // 3. Gọi Backend qua AJAX
+            try {
+                const response = await fetch('/Chat/SendMessage', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `userMessage=${encodeURIComponent(message)}`
+                });
+                const data = await response.json();
+                
+                // Xóa trạng thái "đang gõ..." và hiện kết quả
+                document.getElementById(typingId).remove();
+                appendMessage('bot', data.reply);
+            } catch (error) {
+                document.getElementById(typingId).remove();
+                appendMessage('bot', '<span class="text-danger">Lỗi kết nối máy chủ! Vui lòng thử lại.</span>');
+            }
+        }
+
+        // Bắt sự kiện click nút gửi hoặc nhấn Enter
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+    });
+</script>
+</body>
+
+</html>
