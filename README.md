@@ -1,6 +1,3 @@
-Một file `README.md` chuyên nghiệp không chỉ giúp dự án GitHub của bạn ghi điểm tuyệt đối trong mắt hội đồng chấm thi mà còn giúp bất kỳ ai xem mã nguồn cũng hiểu được hệ thống hoạt động ra sao.
-
-Dưới đây là mẫu nội dung chi tiết được "đo ni đóng giày" riêng cho hệ thống của bạn. Bạn chỉ cần copy toàn bộ đoạn mã bên dưới và dán đè vào file `README.md` trên GitHub là xong:
 
 ```markdown
 # 🏛️ Hệ thống Quản lý và Tra cứu Văn bản - UBND Tủa Chùa
