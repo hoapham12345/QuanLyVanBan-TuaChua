@@ -49,28 +49,41 @@ Hệ thống giúp giải quyết triệt để bài toán tra cứu văn bản 
 ## 📸 Giao diện & Kết quả thực tế
 
 ### 1. Màn hình Đăng nhập & Trang chủ
-![Trang chủ hệ thống](<img width="623" height="429" alt="Picture1" src="https://github.com/user-attachments/assets/9642ae43-d012-4aa2-9a0c-b01d6bc265a6" />)
+
+<img width="623" alt="Picture1" src="https://github.com/user-attachments/assets/9642ae43-d012-4aa2-9a0c-b01d6bc265a6" />
 
 > *Giao diện tổng quan hiển thị thống kê tài liệu và bộ lọc tìm kiếm nâng cao.*
 
+---
+
 ### 2. Quản lý phân quyền & Hồ sơ cán bộ (Admin)
-![Phân quyền phòng ban](<img width="974" height="825" alt="image" src="https://github.com/user-attachments/assets/b190e834-7797-4385-862c-6ac8781c9d4f" />
-)
+
+<img width="974" alt="image" src="https://github.com/user-attachments/assets/b190e834-7797-4385-862c-6ac8781c9d4f" />
+
 > *Admin có thể gán quyền xem văn bản theo từng phòng ban cụ thể cho mỗi tài khoản cán bộ.*
 
+---
+
 ### 3. Quy trình Phê duyệt & Cấp quyền văn bản
-![Phê duyệt văn bản](<img width="974" height="356" alt="image" src="https://github.com/user-attachments/assets/5c9eeabc-886c-4982-b94f-56881f44e291" />
-)
+
+<img width="974" alt="image" src="https://github.com/user-attachments/assets/5c9eeabc-886c-4982-b94f-56881f44e291" />
+
 > *Giao diện Modal cho phép Admin phê duyệt và chỉ định văn bản này được phép hiển thị cho những phòng ban nào.*
 
+---
+
 ### 4. Tiện ích Xem chi tiết & Tải qua mã QR
-![Mã QR Tải tài liệu](<img width="943" height="454" alt="image" src="https://github.com/user-attachments/assets/55839ec5-9084-4eaf-abb2-27ad804e0663" />
-)
+
+<img width="943" alt="image" src="https://github.com/user-attachments/assets/55839ec5-9084-4eaf-abb2-27ad804e0663" />
+
 > *Người dùng xem trước nội dung tóm tắt và có thể sử dụng điện thoại quét mã QR để tải trực tiếp file đính kèm.*
 
+---
+
 ### 5. Kết quả đóng dấu Watermark tự động
-![Watermark PDF](<img width="974" height="621" alt="image" src="https://github.com/user-attachments/assets/262d3ec1-1cbf-4814-9991-e44b3d707d44" />
-)
+
+<img width="974" alt="image" src="https://github.com/user-attachments/assets/262d3ec1-1cbf-4814-9991-e44b3d707d44" />
+
 > *File PDF tải về đã được hệ thống tự động đóng dấu bảo mật chìm.*
 
 ---
